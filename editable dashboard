@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Loop Culture | Maker Dashboard</title>
+	<style>
+		/* Afro-Modernist Aesthetic Palette */
+		:root {
+			--bg-base: #F8F8F8;
+			--surface: #FFFFFF;
+			--text-main: #111111;
+			--text-muted: #555555;
+			--accent-gold: #C5A059;
+			--accent-leather: #4A3320;
+			--border: #E5E5E5;
+		}
+
+		body {
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			background-color: var(--bg-base);
+			color: var(--text-main);
+			margin: 0;
+			padding: 40px 20px;
+			display: flex;
+			justify-content: center;
+		}
+
+		.dashboard-container {
+			max-width: 1000px;
+			width: 100%;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+		}
+
+		.header-full {
+			grid-column: 1 / -1;
+			border-bottom: 3px solid var(--text-main);
+			padding-bottom: 20px;
+			margin-bottom: 10px;
+		}
+
+		h1 {
+			font-size: 32px;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			margin: 0;
+		}
+
+		h2 {
+			font-size: 20px;
+			color: var(--accent-leather);
+			border-bottom: 1px solid var(--accent-gold);
+			padding-bottom: 10px;
+			margin-top: 0;
+		}
+
+		.card {
+			background: var(--surface);
+			padding: 30px;
+			border: 1px solid var(--border);
+			border-radius: 4px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+		}
+
+		label {
+			display: block;
+			font-size: 12px;
+			font-weight: bold;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			margin-bottom: 8px;
+			color: var(--text-muted);
+		}
+
+		input {
+			width: 100%;
+			padding: 12px;
+			margin-bottom: 20px;
+			border: 1px solid var(--border);
+			background-color: var(--bg-base);
+			color: var(--text-main);
+			font-size: 16px;
+			box-sizing: border-box;
+			border-radius: 2px;
+		}
+
+		input:focus {
+			outline: none;
+			border-color: var(--accent-gold);
+		}
+
+		.product-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 0;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.product-name {
+			font-weight: bold;
+			font-size: 16px;
+		}
+
+		.product-stock {
+			background-color: var(--text-main);
+			color: var(--surface);
+			padding: 4px 10px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: bold;
+		}
+
+		.product-price {
+			color: var(--accent-leather);
+			font-weight: bold;
+		}
+
+		.results {
+			background-color: var(--text-main);
+			color: var(--surface);
+			padding: 25px;
+			border-radius: 4px;
+			margin-top: 10px;
+		}
+
+		.results p {
+			display: flex;
+			justify-content: space-between;
+			margin: 10px 0;
+			font-size: 15px;
+			letter-spacing: 0.5px;
+		}
+
+		.results .highlight {
+			color: var(--accent-gold);
+			font-size: 20px;
+			font-weight: bold;
+		}
+
+		@media (max-width: 768px) {
+			.dashboard-container {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="dashboard-container">
+	<div class="header-full">
+		<h1>Loop Culture</h1>
+		<p style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Maker Dashboard &amp; Pricing Engine</p>
+	</div>
+
+	<div class="card">
+		<h2>Active Products</h2>
+		<div class="product-item">
+			<div>
+				<div class="product-name">Mini Loop-Bucket Bag</div>
+				<div class="product-price">N$ 450.00</div>
+			</div>
+			<div class="product-stock">Custom Order</div>
+		</div>
+        <div class="product-item">
+			<div>
+				<div class="product-name">Loop-Bucket Bag</div>
+				<div class="product-price">N$ 325.00</div>
+			</div>
+			<div class="product-stock">Custom Order</div>
+		</div>
+		<div class="product-item">
+			<div>
+				<div class="product-name">2D Keychain (Simple)</div>
+				<div class="product-price">N$ 80.00</div>
+			</div>
+			<div class="product-stock">5 in stock <p>
+            <week></week></div>
+		</div>
+        <div class="product-item">
+			<div>
+				<div class="product-name">2D/3D Amigurumi Keychain (Advanced)</div>
+				<div class="product-price">N$ 150.00</div>
+			</div>
+			<div class="product-stock">4 in stock <p>
+            <week></week></div>
+		</div>
+		<div class="product-item">
+			<div>
+				<div class="product-name">Heritage Amigurumi Doll (Advanced)</div>
+				<div class="product-price">N$ 2200.00</div>
+			</div>
+			<div class="product-stock">1 in stock</div>
+		</div>
+	</div>
+
+	<div class="card">
+		<h2>Margin Engine</h2>
+		<label for="materials">Materials (Yarn + Hardware) - N$</label>
+		<input type="number" id="materials" value="43.00" oninput="calculate()">
+		<label for="packaging">Packaging Cost - N$</label>
+		<input type="number" id="packaging" value="5.00" oninput="calculate()">
+		<label for="stitches">Total Stitch Count</label>
+		<input type="number" id="stitches" value="2000" oninput="calculate()">
+		<label for="margin">Target Margin (%)</label>
+		<input type="number" id="margin" value="40" oninput="calculate()">
+
+		<div class="results" aria-live="polite">
+			<p>Total Cost: <span id="totalCost">N$ 0.00</span></p>
+			<p>Target Price: <span id="sellingPrice" class="highlight">N$ 0.00</span></p>
+			<p>Pure Profit: <span id="pureProfit" class="highlight">N$ 0.00</span></p>
+		</div>
+	</div>
+</div>
+
+<script>
+	function calculate() {
+		const materials = parseFloat(document.getElementById('materials').value) || 0;
+		const packaging = parseFloat(document.getElementById('packaging').value) || 0;
+		const stitches = parseFloat(document.getElementById('stitches').value) || 0;
+		const marginPercent = parseFloat(document.getElementById('margin').value) || 0;
+
+		const laborCost = stitches * 0.05;
+		const subtotal = materials + packaging + laborCost;
+		const totalCost = subtotal * 1.10;
+		const marginDecimal = marginPercent / 100;
+		const sellingPrice = marginDecimal < 1 ? totalCost / (1 - marginDecimal) : 0;
+		const pureProfit = sellingPrice - totalCost;
+
+		document.getElementById('totalCost').innerText = 'N$ ' + totalCost.toFixed(2);
+		document.getElementById('sellingPrice').innerText = 'N$ ' + sellingPrice.toFixed(2);
+		document.getElementById('pureProfit').innerText = 'N$ ' + pureProfit.toFixed(2);
+	}
+	calculate();
+</script>
+</body>
+</html>
