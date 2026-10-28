@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Culture Profit Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 20px;
+        }
+        .calculator-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .results {
+            background-color: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .results p {
+            margin: 10px 0;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .results .highlight {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <h2>Pricing & Margin Engine</h2>
+    
+    <div class="input-group">
+        <label>Material Costs (Yarn, Hardware) - N$</label>
+        <input type="number" id="materials" value="43.00" oninput="calculate()">
+    </div>
+    
+    <div class="input-group">
+        <label>Packaging Cost - N$</label>
+        <input type="number" id="packaging" value="5.00" oninput="calculate()">
+    </div>
+    
+    <div class="input-group">
+        <label>Total Stitch Count</label>
+        <input type="number" id="stitches" value="2000" oninput="calculate()">
+    </div>
+    
+    <div class="input-group">
+        <label>Target Margin (%)</label>
+        <input type="number" id="margin" value="40" oninput="calculate()">
+    </div>
+
+    <div class="results">
+        <p>Total Cost: <span id="totalCost">N$0.00</span></p>
+        <p>Target Price: <span id="sellingPrice" class="highlight">N$0.00</span></p>
+        <p>Pure Profit: <span id="pureProfit" class="highlight">N$0.00</span></p>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        // 1. Get user inputs
+        let materials = parseFloat(document.getElementById('materials').value) || 0;
+        let packaging = parseFloat(document.getElementById('packaging').value) || 0;
+        let stitches = parseFloat(document.getElementById('stitches').value) || 0;
+        let marginPercent = parseFloat(document.getElementById('margin').value) || 0;
+
+        // 2. Business Logic Calculations
+        let laborCost = stitches * 0.05; // N$0.05 per stitch based on your formula
+        let subtotal = materials + packaging + laborCost;
+        let overhead = subtotal * 0.10; // 10% Overhead 
+        let totalCost = subtotal + overhead;
+
+        // Convert target margin to decimal (e.g., 40% becomes 0.40)
+        let marginDecimal = marginPercent / 100;
+        
+        // Margin Pricing Formula: Total Cost / (1 - Margin)
+        let sellingPrice = marginDecimal < 1 ? (totalCost / (1 - marginDecimal)) : 0;
+        let pureProfit = sellingPrice - totalCost;
+
+        // 3. Update the Dashboard UI
+        document.getElementById('totalCost').innerText = "N$" + totalCost.toFixed(2);
+        document.getElementById('sellingPrice').innerText = "N$" + sellingPrice.toFixed(2);
+        document.getElementById('pureProfit').innerText = "N$" + pureProfit.toFixed(2);
+    }
+
+    // Run once on load to populate defaults
+    calculate();
+</script>
+
+</body>
+</html>
