@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Culture | Maker Dashboard</title>
+    <style>
+        /* Seaside-Desert Lounge Palette */
+        :root {
+            --bg-base: #221612;
+            --surface: #42241C;
+            --surface-alt: #542D23;
+            --text-main: #F4E0D6;
+            --text-muted: #CFA798;
+            --accent-pink: #E8386F;
+            --accent-yellow: #D9A036;
+            --border: #6B3D32;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .header-full {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--accent-pink);
+            padding-bottom: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .header-text h1 {
+            font-family: 'Georgia', serif;
+            font-size: 38px;
+            font-weight: normal;
+            font-style: italic;
+            color: var(--accent-yellow);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: var(--accent-yellow);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .card {
+            background: var(--surface);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+        }
+
+        /* Editable Elements Styling */
+        [contenteditable="true"] {
+            padding: 2px 4px;
+            border-bottom: 1px dashed var(--text-muted);
+            transition: background 0.2s;
+        }
+        
+        [contenteditable="true"]:focus {
+            outline: none;
+            background-color: rgba(232, 56, 111, 0.1); /* Faint pink highlight when typing */
+            border-bottom: 1px solid var(--accent-pink);
+        }
+
+        /* Product List Styling */
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-name {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .product-stock {
+            background-color: var(--bg-base);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--border);
+        }
+
+        .product-price {
+            color: var(--accent-pink);
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        /* Save Button */
+        .btn-save {
+            background-color: var(--accent-pink);
+            color: var(--bg-base);
+            border: none;
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+
+        .btn-save:hover {
+            background-color: #ff4a85;
+        }
+
+        .btn-save:active {
+            transform: scale(0.95);
+        }
+
+        /* Calculator Styles */
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-base);
+            color: var(--accent-pink);
+            font-size: 18px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 10px rgba(232, 56, 111, 0.2);
+        }
+
+        .results {
+            background-color: var(--bg-base);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .results p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .results .highlight {
+            color: var(--accent-yellow);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .header-full {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="header-full">
+        <div class="header-text">
+            <h1>Loop Culture</h1>
+            <p style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 11px; font-weight: bold; margin-top: 5px;">Maker Dashboard & Pricing Engine</p>
+        </div>
+        <button class="btn-save" onclick="saveCatalog()">Save Catalog</button>
+    </div>
+
+    <!-- LEFT COLUMN: PRODUCT CATALOGUE -->
+    <div class="card" id="catalog-card">
+        <h2>Active Products</h2>
+        
+        <!-- The container we will save and load -->
+        <div id="editable-catalog">
+            <div class="product-item">
+                <div>
+                    <div class="product-name" contenteditable="true">Mini Coral Loop Bucket Bag</div>
+                    <div class="product-price" contenteditable="true">N$ 325.00</div>
+                </div>
+                <div class="product-stock" contenteditable="true">Custom Order</div>
+            </div>
+
+            <div class="product-item">
+                <div>
+                    <div class="product-name" contenteditable="true">Amigurumi Keychain (Simple)</div>
+                    <div class="product-price" contenteditable="true">N$ 35.00</div>
+                </div>
+                <div class="product-stock" contenteditable="true">4 in stock</div>
+            </div>
+
+            <div class="product-item">
+                <div>
+                    <div class="product-name" contenteditable="true">Heritage Amigurumi Doll</div>
+                    <div class="product-price" contenteditable="true">N$ 120.00</div>
+                </div>
+                <div class="product-stock" contenteditable="true">1 in stock</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN: PROFIT CALCULATOR -->
+    <div class="card">
+        <h2>Margin Engine</h2>
+        
+        <label>Material Costs (Yarn, Hardware) - N$</label>
+        <input type="number" id="materials" value="43.00" oninput="calculate()">
+        
+        <label>Packaging Cost - N$</label>
+        <input type="number" id="packaging" value="5.00" oninput="calculate()">
+        
+        <label>Total Stitch Count</label>
+        <input type="number" id="stitches" value="2000" oninput="calculate()">
+        
+        <label>Target Margin (%)</label>
+        <input type="number" id="margin" value="40" oninput="calculate()">
+
+        <div class="results">
+            <p>Total Cost: <span id="totalCost">N$0.00</span></p>
+            <p>Target Price: <span id="sellingPrice" style="color: var(--accent-pink); font-size: 20px; font-weight: bold;">N$0.00</span></p>
+            <p>Pure Profit: <span id="pureProfit" class="highlight">N$0.00</span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- CATALOG MEMORY SCRIPT ---
+    // Load saved catalog when page opens
+    document.addEventListener("DOMContentLoaded", function() {
+        let savedCatalog = localStorage.getItem("loopCultureCatalog");
+        if (savedCatalog) {
+            document.getElementById("editable-catalog").innerHTML = savedCatalog;
+        }
+    });
+
+    // Save catalog when button is clicked
+    function saveCatalog() {
+        let catalogHTML = document.getElementById("editable-catalog").innerHTML;
+        localStorage.setItem("loopCultureCatalog", catalogHTML);
+        
+        // Brief visual feedback on the button
+        let btn = document.querySelector('.btn-save');
+        btn.innerText = "Saved!";
+        btn.style.backgroundColor = "#27ae60"; // Flash green
+        setTimeout(() => {
+            btn.innerText = "Save Catalog";
+            btn.style.backgroundColor = "var(--accent-pink)";
+        }, 1500);
+    }
+
+    // --- MARGIN ENGINE SCRIPT ---
+    function calculate() {
+        let materials = parseFloat(document.getElementById('materials').value) || 0;
+        let packaging = parseFloat(document.getElementById('packaging').value) || 0;
+        let stitches = parseFloat(document.getElementById('stitches').value) || 0;
+        let marginPercent = parseFloat(document.getElementById('margin').value) || 0;
+
+        let laborCost = stitches * 0.05; 
+        let subtotal = materials + packaging + laborCost;
+        let overhead = subtotal * 0.10; 
+        let totalCost = subtotal + overhead;
+
+        let marginDecimal = marginPercent / 100;
+        let sellingPrice = marginDecimal < 1 ? (totalCost / (1 - marginDecimal)) : 0;
+        let pureProfit = sellingPrice - totalCost;
+
+        document.getElementById('totalCost').innerText = "N$ " + totalCost.toFixed(2);
+        document.getElementById('sellingPrice').innerText = "N$ " + sellingPrice.toFixed(2);
+        document.getElementById('pureProfit').innerText = "N$ " + pureProfit.toFixed(2);
+    }
+    calculate();
+</script>
+
+</body>
+</html>
